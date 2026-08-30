@@ -144,9 +144,9 @@ const RoomDetails = () => {
               <div>
                 <h1 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{room.name}</h1>
                 <div className="mt-3 flex flex-wrap gap-4 text-sm font-semibold text-slate-500 dark:text-slate-400">
-                  <span className="flex items-center gap-1">
+                  <span className="flex items-center gap-1.5">
                     <Layers className="w-4.5 h-4.5 text-blue-500" />
-                    {room.floor}
+                    <span>{String(room.floor).toLowerCase().includes('floor') ? room.floor : `Floor ${room.floor}`}</span>
                   </span>
                   <span className="flex items-center gap-1">
                     <Users className="w-4.5 h-4.5 text-blue-500" />

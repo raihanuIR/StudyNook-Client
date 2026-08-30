@@ -47,7 +47,7 @@ const RoomCard = ({ room }) => {
         <div className="mt-2.5 flex items-center gap-4 text-xs font-medium text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-1">
             <Layers className="w-3.5 h-3.5 text-blue-500" />
-            <span>{floor}</span>
+            <span>{String(floor).toLowerCase().includes('floor') ? floor : `Floor ${floor}`}</span>
           </div>
           <div className="flex items-center gap-1">
             <Users className="w-3.5 h-3.5 text-blue-500" />
