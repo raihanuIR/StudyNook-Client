@@ -15,6 +15,7 @@ const Rooms = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selectedFloor, setSelectedFloor] = useState('');
+  const [selectedCapacity, setSelectedCapacity] = useState('');
   const [minRate, setMinRate] = useState('');
   const [maxRate, setMaxRate] = useState('');
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -28,14 +29,6 @@ const Rooms = () => {
     'Air Conditioning'
   ];
 
-  const floorOptions = [
-    { label: 'All Floors', value: '' },
-    { label: '1st Floor', value: '1st' },
-    { label: '2nd Floor', value: '2nd' },
-    { label: '3rd Floor', value: '3rd' },
-    { label: '4th Floor', value: '4th' }
-  ];
-
   // Fetch rooms whenever filter states change
   const fetchRooms = async () => {
     setLoading(true);
@@ -43,6 +36,7 @@ const Rooms = () => {
       const params = {};
       if (searchTerm) params.search = searchTerm;
       if (selectedFloor) params.floor = selectedFloor;
+      if (selectedCapacity) params.capacity = selectedCapacity;
       if (minRate) params.minRate = minRate;
       if (maxRate) params.maxRate = maxRate;
       if (selectedAmenities.length > 0) {
@@ -65,7 +59,7 @@ const Rooms = () => {
     }, 400);
 
     return () => clearTimeout(delayDebounce);
-  }, [searchTerm, selectedAmenities, selectedFloor, minRate, maxRate]);
+  }, [searchTerm, selectedAmenities, selectedFloor, selectedCapacity, minRate, maxRate]);
 
   const handleAmenityChange = (amenity) => {
     if (selectedAmenities.includes(amenity)) {
@@ -79,6 +73,7 @@ const Rooms = () => {
     setSearchTerm('');
     setSelectedAmenities([]);
     setSelectedFloor('');
+    setSelectedCapacity('');
     setMinRate('');
     setMaxRate('');
   };
@@ -100,20 +95,34 @@ const Rooms = () => {
         </button>
       </div>
 
-      {/* Floor Filter */}
+      {/* Floor Filter (Numeric) */}
       <div>
         <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
-          Library Floor
+          Floor Level
         </label>
-        <select
+        <input
+          type="number"
+          min={1}
+          placeholder="e.g. 3"
           value={selectedFloor}
           onChange={(e) => setSelectedFloor(e.target.value)}
-          className="w-full px-3 py-2 rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-950 dark:text-white text-sm"
-        >
-          {floorOptions.map(opt => (
-            <option key={opt.value} value={opt.value}>{opt.label}</option>
-          ))}
-        </select>
+          className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+        />
+      </div>
+
+      {/* Capacity Filter (Numeric) */}
+      <div>
+        <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+          Min Capacity (Seats)
+        </label>
+        <input
+          type="number"
+          min={1}
+          placeholder="e.g. 4"
+          value={selectedCapacity}
+          onChange={(e) => setSelectedCapacity(e.target.value)}
+          className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+        />
       </div>
 
       {/* Price Range Filter */}
@@ -127,14 +136,14 @@ const Rooms = () => {
             placeholder="Min"
             value={minRate}
             onChange={(e) => setMinRate(e.target.value)}
-            className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white"
+            className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
           <input
             type="number"
             placeholder="Max"
             value={maxRate}
             onChange={(e) => setMaxRate(e.target.value)}
-            className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white"
+            className="w-full px-3 py-2 text-sm rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-750 text-slate-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
           />
         </div>
       </div>

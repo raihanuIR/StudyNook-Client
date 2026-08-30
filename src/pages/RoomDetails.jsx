@@ -337,9 +337,9 @@ const RoomDetails = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Location Floor</label>
+                  <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-1">Floor Level (Number)</label>
                   <input
-                    type="text" required placeholder="e.g. 3rd Floor" value={editFloor} onChange={(e) => setEditFloor(e.target.value)}
+                    type="number" min={1} max={50} required placeholder="e.g. 3" value={editFloor} onChange={(e) => setEditFloor(e.target.value)}
                     className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-900 dark:text-white rounded-xl"
                   />
                 </div>
