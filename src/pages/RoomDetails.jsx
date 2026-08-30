@@ -77,10 +77,6 @@ const RoomDetails = () => {
     fetchRoomDetails();
   }, [id]);
 
-  const isOwner = user && room && room.owner && (
-    room.owner._id === user.id || room.owner === user.id
-  );
-
   const handleDelete = async () => {
     try {
       await api.delete(`/api/rooms/${id}`);
