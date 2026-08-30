@@ -36,6 +36,32 @@ const Home = () => {
   // Hero Carousel State
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
+
+  const minSwipeDistance = 45;
+
+  const onTouchStart = (e) => {
+    setTouchEndX(null);
+    setTouchStartX(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEndX(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStartX || !touchEndX) return;
+    const distance = touchStartX - touchEndX;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    if (isLeftSwipe) {
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }
+    if (isRightSwipe) {
+      setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1));
+    }
+  };
 
   // Floor Guide Active Tab
   const [activeFloorTab, setActiveFloorTab] = useState(1);
@@ -195,9 +221,12 @@ const Home = () => {
       
       {/* 1. HERO SECTION WITH INTERACTIVE CAROUSEL */}
       <section 
-        className="relative overflow-hidden bg-slate-950 text-white min-h-[580px] lg:min-h-[640px] flex items-center"
+        className="relative overflow-hidden bg-slate-950 text-white min-h-[580px] lg:min-h-[640px] flex items-center touch-pan-y"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         {/* Carousel Background Images with Smooth Crossfade */}
         {heroSlides.map((slide, idx) => (
@@ -275,34 +304,35 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Carousel Navigation Arrows */}
+        {/* Carousel Navigation Arrows (Desktop Only) */}
         <button
           onClick={() => setCurrentSlide((prev) => (prev === 0 ? heroSlides.length - 1 : prev - 1))}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/60 hover:bg-blue-600 text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110"
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/60 hover:bg-blue-600 text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110 items-center justify-center"
           aria-label="Previous Slide"
         >
           <ChevronLeft className="w-6 h-6" />
         </button>
         <button
           onClick={() => setCurrentSlide((prev) => (prev + 1) % heroSlides.length)}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/60 hover:bg-blue-600 text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110"
+          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full bg-slate-900/60 hover:bg-blue-600 text-white backdrop-blur-md border border-white/10 transition-all hover:scale-110 items-center justify-center"
           aria-label="Next Slide"
         >
           <ChevronRight className="w-6 h-6" />
         </button>
 
         {/* Slide Indicator Dots */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5">
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2.5 bg-slate-900/40 px-3 py-1.5 rounded-full backdrop-blur-sm border border-white/10">
           {heroSlides.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentSlide(idx)}
-              className={`h-2.5 rounded-full transition-all duration-300 ${
-                idx === currentSlide ? 'w-8 bg-blue-500' : 'w-2.5 bg-white/40 hover:bg-white/70'
+              className={`h-2 rounded-full transition-all duration-300 ${
+                idx === currentSlide ? 'w-7 bg-blue-500' : 'w-2 bg-white/40 hover:bg-white/70'
               }`}
               aria-label={`Go to slide ${idx + 1}`}
             />
           ))}
+          <span className="text-[10px] text-slate-300 font-medium md:hidden ml-1">Swipe &rarr;</span>
         </div>
       </section>
 
