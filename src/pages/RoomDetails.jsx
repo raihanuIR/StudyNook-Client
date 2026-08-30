@@ -31,6 +31,16 @@ const RoomDetails = () => {
   const [editHourlyRate, setEditHourlyRate] = useState('');
   const [editAmenities, setEditAmenities] = useState([]);
 
+  // Determine if currently logged in user is the owner of this room
+  const currentUserId = user?._id || user?.id;
+  const roomOwnerId = room?.owner?._id || room?.owner?.id || room?.owner;
+  const isOwner = Boolean(
+    currentUserId && roomOwnerId && (
+      String(currentUserId) === String(roomOwnerId) ||
+      (user?.email && room?.owner?.email && user.email === room.owner.email)
+    )
+  );
+
   const amenitiesOptions = [
     'Whiteboard',
     'Projector',

@@ -17,12 +17,8 @@ const MyListings = () => {
   useEffect(() => {
     const fetchMyRooms = async () => {
       try {
-        const response = await api.get('/api/rooms');
-        // Filter rooms listed by current user
-        const filtered = (response.data || []).filter(room => 
-          room.owner === user.id || room.owner?._id === user.id
-        );
-        setMyRooms(filtered);
+        const response = await api.get('/api/rooms/my-listings');
+        setMyRooms(response.data || []);
       } catch (error) {
         console.error('Error fetching listings:', error);
       } finally {
